@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Baruch CCF Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#e8f4fd; --blue:#2563eb; --blue-l:#dbeafe; --gold:#f59e0b;
+  --white:#ffffff; --bg:#f6faff; --text:#0f172a; --muted:#64748b;
+  --border:rgba(37,99,235,.14); --r:14px; --ease:0.38s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+#navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:64px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:box-shadow var(--ease)}
+#navbar.scrolled{box-shadow:0 4px 28px rgba(37,99,235,.09)}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-mark{width:35px;height:35px;background:linear-gradient(135deg,var(--blue),#60a5fa);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700}
+.logo-text{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:700;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links>li{position:relative}
+.nav-links>li>a,.nav-links>li>button{display:flex;align-items:center;gap:4px;padding:7px 14px;border-radius:8px;font-size:.83rem;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:color var(--ease),background var(--ease)}
+.nav-links>li>a:hover,.nav-links>li>button:hover{color:var(--blue);background:rgba(37,99,235,.06)}
+.arrow{font-size:.58rem;transition:transform var(--ease)}
+.nav-links li:hover .arrow{transform:rotate(180deg)}
+.dropdown{position:absolute;top:calc(100% + 6px);left:0;min-width:172px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:6px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity var(--ease),transform var(--ease);box-shadow:0 16px 40px rgba(15,23,42,.1)}
+.nav-links li:hover .dropdown,.nav-links li:focus-within .dropdown{opacity:1;pointer-events:auto;transform:translateY(0)}
+.dropdown a{display:block;padding:9px 13px;border-radius:8px;font-size:.82rem;color:var(--muted);transition:background var(--ease),color var(--ease)}
+.dropdown a:hover{background:rgba(37,99,235,.06);color:var(--blue)}
+#lang-toggle{padding:6px 18px;border:1.5px solid var(--blue);border-radius:20px;font-size:.79rem;font-weight:600;color:var(--blue);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:background var(--ease),color var(--ease)}
+#lang-toggle:hover{background:var(--blue);color:#fff}
+#hero{position:relative;width:100%;height:100vh;overflow:hidden;background:var(--blue-l)}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+.hero-slide.active{opacity:1;z-index:1}
+.hero-slide video{width:100%;height:100%;object-fit:cover}
+.hero-slide[data-type="image"]{background-size:cover;background-position:center}
+#hero-overlay{position:absolute;inset:0;z-index:2;background:linear-gradient(170deg,rgba(255,255,255,.03) 0%,rgba(15,23,42,.3) 55%,rgba(15,23,42,.72) 100%)}
+#hero-arc{position:absolute;bottom:-1px;left:0;right:0;z-index:3;height:80px;background:var(--bg);clip-path:ellipse(56% 100% at 50% 100%)}
+#hero-content{position:absolute;z-index:4;bottom:116px;left:8%;max-width:580px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;padding:5px 14px;background:rgba(255,255,255,.9);border-radius:20px;font-size:.71rem;font-weight:600;letter-spacing:.08em;color:var(--blue);backdrop-filter:blur(8px)}
+#hero-content h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5.2vw,4.6rem);color:#fff;line-height:1.08;margin-bottom:16px;text-shadow:0 2px 24px rgba(0,0,0,.18)}
+#hero-content h1 em{font-style:italic;color:#93c5fd}
+#hero-content p{font-size:.94rem;color:rgba(255,255,255,.82);line-height:1.85;margin-bottom:30px;font-weight:300}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;background:#fff;color:var(--blue);border-radius:40px;font-weight:600;font-size:.87rem;box-shadow:0 6px 24px rgba(37,99,235,.22);transition:transform var(--ease),box-shadow var(--ease),background var(--ease),color var(--ease)}
+.hero-cta:hover{transform:translateY(-3px);background:var(--blue);color:#fff;box-shadow:0 14px 36px rgba(37,99,235,.3)}
+.hero-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);color:#fff;font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;transition:background var(--ease)}
+.hero-arrow:hover{background:rgba(255,255,255,.38)}
+#hero-prev{left:22px}#hero-next{right:22px}
+#hero-dots{position:absolute;z-index:5;bottom:94px;right:8%;display:flex;gap:6px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.38);cursor:pointer;border:none;transition:background var(--ease),width var(--ease),border-radius var(--ease)}
+.hero-dot.active{background:#fff;width:24px;border-radius:4px}
+/* ── 活动区 / Activities ─────────────────────────────────── */
+#activities{background:var(--white);padding:96px 0 80px}
+.acts-header{text-align:center;margin-bottom:52px;padding:0 5%}
+
+/* 三屏影院式布局：overflow hidden 让侧边卡片若隐若现 */
+.acts-viewport{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  padding:20px 0 28px;   /* 留出 box-shadow 显示空间 */
+}
+
+/* 滑动轨道：flex 横排，transition 控制滑动动画 */
+.acts-track{
+  display:flex;
+  align-items:center;
+  gap:0;
+  transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  will-change:transform;
+}
+
+/* 每张卡槽宽度：中间 52%，两侧各 24%，总计 100%
+   实际通过 JS 动态计算 translateX 居中 */
+.act-slot{
+  flex:0 0 auto;
+  padding:0 10px;
+  transition:opacity 0.55s ease, transform 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+.act-slot.slot-center{ width:52%; opacity:1; transform:scale(1); z-index:2; }
+.act-slot.slot-side{   width:24%; opacity:0.45; transform:scale(0.9); }
+.act-slot.slot-far{    width:24%; opacity:0.18; transform:scale(0.82); }
+
+/* 卡片本体 */
+.act-card{
+  border-radius:20px;
+  overflow:hidden;
+  background:var(--white);
+  border:1px solid var(--border);
+  box-shadow:0 4px 20px rgba(37,99,235,.07);
+  transition:box-shadow 0.4s ease;
+  cursor:pointer;
+}
+.slot-center .act-card{box-shadow:0 16px 48px rgba(37,99,235,.16)}
+
+/* 图片区：中间高，两侧矮 */
+.act-img-wrap{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  background:var(--blue-l);
+}
+.slot-center .act-img-wrap{ aspect-ratio:16/9; }
+.slot-side   .act-img-wrap,
+.slot-far    .act-img-wrap{ aspect-ratio:4/3; }
+
+.act-img{ width:100%;height:100%;object-fit:cover;display:block; }
+
+/* 侧边卡片加蒙层让图片更暗 */
+.act-img-wrap::after{
+  content:'';
+  position:absolute;inset:0;
+  background:rgba(255,255,255,0);
+  transition:background 0.4s ease;
+  pointer-events:none;
+}
+.slot-side .act-img-wrap::after{ background:rgba(240,248,255,0.35); }
+.slot-far  .act-img-wrap::after{ background:rgba(240,248,255,0.55); }
+
+/* 占位图（无图时） */
+.act-placeholder{
+  width:100%;height:100%;
+  min-height:160px;
+  background:linear-gradient(135deg,var(--blue-l),#bfdbfe);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.8rem;
+}
+.slot-side .act-placeholder,.slot-far .act-placeholder{font-size:2rem}
+
+/* 卡片文字区 */
+.act-body{padding:20px 22px 22px}
+.slot-center .act-body{padding:24px 28px 26px}
+
+.act-tag{
+  display:inline-block;padding:3px 10px;
+  border-radius:20px;font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;
+}
+.act-tag.current{ background:#dbeafe;color:var(--blue); }
+.act-tag.past{    background:#f1f5f9;color:var(--muted); }
+.act-tag.upcoming{background:#fef9c3;color:#92400e; }
+
+.act-date{font-size:.73rem;color:var(--blue);font-weight:600;margin-bottom:6px}
+
+.act-title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;color:var(--text);line-height:1.25;margin-bottom:6px;
+}
+.slot-center .act-title{font-size:1.5rem}
+.slot-side   .act-title,
+.slot-far    .act-title{ font-size:1rem; }
+
+.act-desc{font-size:.82rem;color:var(--muted);line-height:1.68;font-weight:300}
+.slot-side .act-desc,.slot-far .act-desc{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+/* 左右箭头 */
+.acts-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;z-index:10;
+  background:#fff;border:1.5px solid var(--border);
+  color:var(--blue);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,99,235,.12);
+  transition:background var(--ease),color var(--ease),box-shadow var(--ease);
+}
+.acts-arrow:hover{background:var(--blue);color:#fff;box-shadow:0 6px 22px rgba(37,99,235,.28)}
+.acts-arrow-l{left:16px}
+.acts-arrow-r{right:16px}
+
+/* 指示点 */
+.acts-dots{display:flex;justify-content:center;gap:7px;margin-top:20px;padding:0 5%}
+.acts-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(37,99,235,.2);border:none;cursor:pointer;
+  transition:background var(--ease),width var(--ease),border-radius var(--ease);
+}
+.acts-dot.active{background:var(--blue);width:22px;border-radius:4px}
+
+/* 移动端：只显示中间卡 */
+@media(max-width:700px){
+  .slot-side,.slot-far{display:none}
+  .slot-center{width:88%;margin:0 auto}
+  .acts-arrow-l{left:4px}.acts-arrow-r{right:4px}
+}
+#page-about{display:none}
+#about-section{background:var(--white);padding:96px 8%}
+.about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
+.about-img{width:100%;aspect-ratio:4/3;border-radius:22px;background:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900') center/cover;box-shadow:0 20px 60px rgba(37,99,235,.12);position:relative}
+.about-img::after{content:'';position:absolute;inset:0;border-radius:22px;border:2px solid rgba(37,99,235,.09)}
+.feat{display:flex;gap:13px;align-items:flex-start;padding:13px 15px;background:var(--sky);border-radius:12px;border:1px solid rgba(37,99,235,.08);transition:transform var(--ease)}
+.feat:hover{transform:translateX(5px)}
+.feat-icon{width:32px;height:32px;flex-shrink:0;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;box-shadow:0 2px 8px rgba(37,99,235,.1)}
+.feat h4{font-size:.86rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.feat p{font-size:.79rem;color:var(--muted);line-height:1.62}
+.network-banner{margin-top:26px;padding:18px 20px;background:linear-gradient(135deg,#eff6ff,var(--blue-l));border-radius:14px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:13px}
+.network-icon{font-size:1.5rem;flex-shrink:0;margin-top:2px}
+.network-banner h4{font-size:.87rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.network-banner p{font-size:.8rem;color:var(--muted);line-height:1.65}
+#members-section{background:var(--sky);padding:80px 8%}
+.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px;margin-top:44px}
+.member-card{background:#fff;border-radius:20px;padding:38px 26px 30px;border:1px solid var(--border);position:relative;transition:transform var(--ease),box-shadow var(--ease)}
+.member-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,var(--blue),#60a5fa)}
+.member-card.gold::before{background:linear-gradient(90deg,var(--gold),#fcd34d)}
+.member-card:hover{transform:translateY(-7px);box-shadow:0 22px 52px rgba(37,99,235,.12)}
+.member-role{display:inline-block;margin-bottom:16px;padding:3px 12px;background:var(--sky);color:var(--blue);font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:20px;border:1px solid rgba(37,99,235,.18)}
+.member-avatar{width:86px;height:86px;border-radius:50%;margin:0 auto 14px;overflow:hidden;border:3px solid var(--blue-l);box-shadow:0 4px 16px rgba(37,99,235,.14)}
+.member-avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-ph{width:100%;height:100%;background:linear-gradient(135deg,var(--blue),#60a5fa);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:#fff;font-weight:700}
+.member-name{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:700;color:var(--text);margin-bottom:9px}
+.member-bio{font-size:.81rem;color:var(--muted);line-height:1.72;font-weight:300}
+#survey{background:var(--white);padding:96px 8%}
+.survey-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:72px;align-items:start;margin-top:52px}
+.survey-visual{background:linear-gradient(140deg,#eff6ff,var(--blue-l),#e0f2fe);border-radius:24px;padding:48px 36px;text-align:center;border:1px solid var(--border)}
+.survey-icon{font-size:3.6rem;margin-bottom:14px}
+.survey-visual h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--text);margin-bottom:10px}
+.survey-visual p{font-size:.87rem;color:var(--muted);line-height:1.78}
+.survey-form{display:flex;flex-direction:column;gap:16px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:.8rem;font-weight:600;color:var(--text)}
+.fg input,.fg select,.fg textarea{padding:10px 14px;border:1.5px solid rgba(37,99,235,.18);border-radius:10px;font-size:.87rem;color:var(--text);background:var(--sky);font-family:'Inter',sans-serif;outline:none;transition:border-color var(--ease),box-shadow var(--ease)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);background:#fff}
+.fg textarea{resize:vertical;min-height:84px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.chk-group{display:flex;flex-direction:column;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;font-size:.83rem;color:var(--muted);cursor:pointer}
+.chk input{width:14px;height:14px;accent-color:var(--blue)}
+.btn-submit{width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background var(--ease),transform var(--ease),box-shadow var(--ease)}
+.btn-submit:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.28)}
+.survey-success{display:none;text-align:center;padding:36px 20px;color:var(--blue)}
+.survey-success .check-big{font-size:3rem;margin-bottom:10px}
+.survey-success h4{font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-bottom:8px}
+.survey-success p{font-size:.87rem;color:var(--muted)}
+#footer{background:var(--text);padding:60px 8% 36px;color:rgba(255,255,255,.5)}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:28px}
+.footer-brand .logo-text{color:#fff}
+.footer-tagline{font-size:.84rem;line-height:1.7;max-width:250px;margin-top:12px}
+.footer-links h5{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:.83rem;color:rgba(255,255,255,.5);transition:color var(--ease)}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.77rem}
+.section-eye{display:inline-flex;align-items:center;gap:7px;font-size:.71rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:9px}
+.section-eye::before{content:'';display:block;width:15px;height:1.5px;background:var(--blue)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3vw,2.8rem);color:var(--text);line-height:1.15;margin-bottom:13px}
+.section-sub{font-size:.93rem;color:var(--muted);line-height:1.85;font-weight:300}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+@media(max-width:960px){#navbar{padding:0 22px}.about-grid{grid-template-columns:1fr;gap:40px}.survey-wrap{grid-template-columns:1fr;gap:40px}}
+@media(max-width:700px){.acts-stage{grid-template-columns:1fr}.act-card.side{display:none}.nav-links>li>a,.nav-links>li>button{padding:7px 9px;font-size:.78rem}#hero-content{left:5%}.footer-inner{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="logo-mark">CCF</div>
+    <span class="logo-text">Baruch CCF</span>
+  </div>
+  <ul class="nav-links">
+    <li>
+      <button><span data-i18n="nav_about">About Us</span><span class="arrow">&#9662;</span></button>
+      <div class="dropdown">
+        <a href="#" onclick="showPage('about');return false" data-i18n="nav_intro">Club Introduction</a>
+        <a href="#" onclick="showPage('about');setTimeout(function(){scrollToId('members-section')},120);return false" data-i18n="nav_members">Members</a>
+      </div>
+    </li>
+    <li><a href="https://www.bible.com/zh-CN/bible/48/JHN.1.CUNPSS-" target="_blank" data-i18n="nav_bible">Free Bible</a></li>
+    <li><a href="https://www.instagram.com/baruch.ccf/" target="_blank">Instagram</a></li>
+    <li><a href="#" onclick="showPage('home');setTimeout(function(){scrollToId('survey')},120);return false" data-i18n="nav_survey">Survey</a></li>
+    <li><button id="lang-toggle" onclick="toggleLang()">&#20013;&#25991;</button></li>
+  </ul>
+</nav>
+
+<div id="page-home">
+  <section id="hero">
+    <!-- ⚠️ 替换视频：改 src -->
+    <div class="hero-slide active" data-type="video" data-index="0">
+      <video autoplay muted playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      </video>
+    </div>
+    <!-- ⚠️ 替换图片：改 style 里的 URL。可复制/删除整个 div 增减图片 -->
+    <div class="hero-slide" data-type="image" data-index="1" style="background-image:url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1600')"></div>
+    <div class="hero-slide" data-type="image" data-index="2" style="background-image:url('https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1600')"></div>
+    <div class="hero-slide" data-type="image" data-index="3" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600')"></div>
+    <div id="hero-overlay"></div>
+    <div id="hero-arc"></div>
+    <div id="hero-content">
+      <div class="hero-badge" data-i18n="hero_tag">Baruch College &middot; Christian Fellowship</div>
+      <h1 data-i18n="hero_title">Faith, <em>Community</em>,<br>and Purpose.</h1>
+      <p data-i18n="hero_desc">A welcoming community where students explore faith, build friendships, and grow together.</p>
+      <a href="#" class="hero-cta" onclick="scrollToId('activities');return false" data-i18n="hero_cta">See Our Activities &#8594;</a>
+    </div>
+    <button class="hero-arrow" id="hero-prev" onclick="heroNav(-1)">&#8249;</button>
+    <button class="hero-arrow" id="hero-next" onclick="heroNav(1)">&#8250;</button>
+    <div id="hero-dots"></div>
+  </section>
+
+  <section id="activities">
+    <div class="acts-header reveal">
+      <div class="section-eye" data-i18n="acts_eye">Our Activities</div>
+      <h2 class="section-title" data-i18n="acts_title">What's Happening</h2>
+      <p class="section-sub" data-i18n="acts_sub">This week's gathering, plus past and upcoming events.</p>
+    </div>
+    <!-- 影院式视口：JS 动态渲染卡片并控制 translateX -->
+    <div class="acts-viewport">
+      <div class="acts-track" id="acts-track"></div>
+      <button class="acts-arrow acts-arrow-l" onclick="actsNav(-1)">&#8249;</button>
+      <button class="acts-arrow acts-arrow-r" onclick="actsNav(1)">&#8250;</button>
+    </div>
+    <div class="acts-dots" id="acts-dots"></div>
+  </section>
+
+  <section id="survey">
+    <div class="reveal" style="text-align:center">
+      <div class="section-eye" data-i18n="survey_eye">Get Involved</div>
+      <h2 class="section-title" data-i18n="survey_title">Join Us</h2>
+      <p class="section-sub" style="max-width:480px;margin:0 auto" data-i18n="survey_sub">Fill out this quick form and we will be in touch.</p>
+    </div>
+    <div class="survey-wrap">
+      <div class="survey-visual reveal d1">
+        <div class="survey-icon">&#9993;</div>
+        <h3 data-i18n="survey_card_title">We Want to Know You</h3>
+        <p data-i18n="survey_card_body">Whether exploring faith for the first time or looking for community, you are welcome here.</p>
+      </div>
+      <div class="reveal d2">
+        <div class="survey-form">
+          <div class="form-row">
+            <div class="fg"><label data-i18n="sf_fname">First Name *</label><input id="f-fname" type="text" placeholder="John"></div>
+            <div class="fg"><label data-i18n="sf_lname">Last Name</label><input id="f-lname" type="text" placeholder="Doe"></div>
+          </div>
+          <div class="fg"><label data-i18n="sf_email">Email *</label><input id="f-email" type="email" placeholder="you@baruch.cuny.edu"></div>
+          <div class="fg">
+            <label data-i18n="sf_year">Year at Baruch</label>
+            <select id="f-year">
+              <option value="" data-i18n="sf_select">-- Select --</option>
+              <option data-i18n="sf_fresh">Freshman</option>
+              <option data-i18n="sf_soph">Sophomore</option>
+              <option data-i18n="sf_jr">Junior</option>
+              <option data-i18n="sf_sr">Senior</option>
+              <option data-i18n="sf_grad">Graduate</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label data-i18n="sf_interest">I am interested in...</label>
+            <div class="chk-group">
+              <label class="chk"><input type="checkbox"><span data-i18n="si_bible">Bible study</span></label>
+              <label class="chk"><input type="checkbox"><span data-i18n="si_worship">Worship and praise</span></label>
+              <label class="chk"><input type="checkbox"><span data-i18n="si_social">Social events</span></label>
+              <label class="chk"><input type="checkbox"><span data-i18n="si_serve">Service and outreach</span></label>
+            </div>
+          </div>
+          <div class="fg"><label data-i18n="sf_msg">Anything else?</label><textarea id="f-msg" placeholder="Say hi!"></textarea></div>
+          <button class="btn-submit" onclick="submitSurvey()" data-i18n="sf_submit">Send</button>
+          <div class="survey-success" id="survey-success">
+            <div class="check-big">&#10003;</div>
+            <h4 data-i18n="ss_title">Thank you!</h4>
+            <p data-i18n="ss_body">We will reach out soon. See you at the next gathering!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="page-about">
+  <div style="height:64px"></div>
+  <section id="about-section">
+    <div class="reveal">
+      <div class="section-eye" data-i18n="about_eye">Who We Are</div>
+      <h2 class="section-title" data-i18n="about_title">Our Club Story</h2>
+    </div>
+    <div class="about-grid" style="margin-top:52px">
+      <!-- ⚠️ 替换社团照片：修改 .about-img 的 CSS background URL -->
+      <div class="about-img reveal d1"></div>
+      <div class="about-text reveal d2">
+        <div class="section-eye" data-i18n="about_eye2">Baruch CCF</div>
+        <h3 class="section-title" data-i18n="about_heading">Growing in Faith Together</h3>
+        <p class="section-sub" style="margin-bottom:28px" data-i18n="about_body">Baruch CCF is a student-led organization at Baruch College, CUNY, welcoming students of all backgrounds.</p>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div class="feat"><div class="feat-icon">&#128214;</div><div><h4 data-i18n="f1t">Weekly Bible Study</h4><p data-i18n="f1d">Every Friday in a warm, open setting.</p></div></div>
+          <div class="feat"><div class="feat-icon">&#129309;</div><div><h4 data-i18n="f2t">Community and Fellowship</h4><p data-i18n="f2d">Lifelong friendships through meals, events, and prayer.</p></div></div>
+          <div class="feat"><div class="feat-icon">&#127757;</div><div><h4 data-i18n="f3t">Outreach and Service</h4><p data-i18n="f3d">Giving back to Baruch and New York City.</p></div></div>
+        </div>
+        <div class="network-banner">
+          <div class="network-icon">&#127963;</div>
+          <div>
+            <h4 data-i18n="net_title">Part of the CCF Network</h4>
+            <p data-i18n="net_body">Baruch CCF is a branch of the broader CCF network across multiple universities in New York and beyond.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="members-section">
+    <div class="reveal">
+      <div class="section-eye" data-i18n="mem_eye">The Team</div>
+      <h2 class="section-title" data-i18n="mem_title">Meet Our Members</h2>
+      <p class="section-sub" data-i18n="mem_sub">Dedicated students passionate about faith and community.</p>
+    </div>
+    <div class="members-grid" id="members-grid"></div>
+  </section>
+</div>
+
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><div class="logo-mark">CCF</div><span class="logo-text">Baruch CCF</span></div>
+      <p class="footer-tagline" data-i18n="ft_tag">A community of faith at Baruch College, CUNY.</p>
+    </div>
+    <div class="footer-links">
+      <h5 data-i18n="ft_nav">Navigate</h5>
+      <ul>
+        <li><a href="#" onclick="showPage('home');return false" data-i18n="ft_home">Home</a></li>
+        <li><a href="#" onclick="showPage('about');return false" data-i18n="nav_intro">Club Introduction</a></li>
+        <li><a href="#" onclick="showPage('about');setTimeout(function(){scrollToId('members-section')},120);return false" data-i18n="nav_members">Members</a></li>
+        <li><a href="#" onclick="showPage('home');setTimeout(function(){scrollToId('survey')},120);return false" data-i18n="nav_survey">Survey</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h5 data-i18n="ft_connect">Connect</h5>
+      <ul>
+        <li><a href="https://www.bible.com/zh-CN/bible/48/JHN.1.CUNPSS-" target="_blank" data-i18n="nav_bible">Free Bible</a></li>
+        <li><a href="https://www.instagram.com/baruch.ccf/" target="_blank">@baruch.ccf</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#127171745270736067717a3c71677c6b3c777667"><span class="__cf_email__" data-cfemail="e98a8a8fa98b889b9c8a81c78a9c8790c78c8d9c">[email&#160;protected]</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span data-i18n="ft_copy">&#169; 2025 Baruch CCF Club. All rights reserved.</span>
+    <span data-i18n="ft_love">Made with love at Baruch</span>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* =============================================================
+   1. 语言包 / LANGUAGE PACK
+   ⚠️ 直接修改中文即可，两种语言完全独立互不影响
+============================================================= */
+var i18n = {
+  en: {
+    nav_about:"About Us", nav_intro:"Club Introduction", nav_members:"Members",
+    nav_bible:"Free Bible", nav_survey:"Survey",
+    hero_tag:"Baruch College · Christian Fellowship",
+    hero_title:"Faith, <em>Community</em>,<br>and Purpose.",
+    hero_desc:"A welcoming community where students explore faith, build friendships, and grow together.",
+    hero_cta:"See Our Activities &#8594;",
+    acts_eye:"Our Activities", acts_title:"What's Happening",
+    acts_sub:"This week's gathering, plus past and upcoming events.",
+    survey_eye:"Get Involved", survey_title:"Join Us",
+    survey_sub:"Fill out this quick form and we will be in touch.",
+    survey_card_title:"We Want to Know You",
+    survey_card_body:"Whether exploring faith for the first time or looking for community, you are welcome here.",
+    sf_fname:"First Name *", sf_lname:"Last Name", sf_email:"Email *",
+    sf_year:"Year at Baruch", sf_select:"-- Select --",
+    sf_fresh:"Freshman", sf_soph:"Sophomore", sf_jr:"Junior", sf_sr:"Senior", sf_grad:"Graduate",
+    sf_interest:"I am interested in...",
+    si_bible:"Bible study", si_worship:"Worship and praise",
+    si_social:"Social events", si_serve:"Service and outreach",
+    sf_msg:"Anything else?", sf_submit:"Send",
+    ss_title:"Thank you!", ss_body:"We will reach out soon. See you at the next gathering!",
+    about_eye:"Who We Are", about_eye2:"Baruch CCF",
+    about_title:"Our Club Story", about_heading:"Growing in Faith Together",
+    about_body:"Baruch CCF is a student-led organization at Baruch College, CUNY, welcoming students of all backgrounds.",
+    f1t:"Weekly Bible Study", f1d:"Every Friday in a warm, open setting.",
+    f2t:"Community and Fellowship", f2d:"Lifelong friendships through meals, events, and prayer.",
+    f3t:"Outreach and Service", f3d:"Giving back to Baruch and New York City.",
+    net_title:"Part of the CCF Network",
+    net_body:"Baruch CCF is a branch of the broader CCF network across multiple universities in New York and beyond.",
+    mem_eye:"The Team", mem_title:"Meet Our Members",
+    mem_sub:"Dedicated students passionate about faith and community.",
+    ft_tag:"A community of faith at Baruch College, CUNY.",
+    ft_nav:"Navigate", ft_connect:"Connect", ft_home:"Home",
+    ft_copy:"&#169; 2025 Baruch CCF Club. All rights reserved.",
+    ft_love:"Made with love at Baruch"
+  },
+  zh: {
+    nav_about:"关于我们", nav_intro:"社团介绍", nav_members:"成员名单",
+    nav_bible:"免费圣经", nav_survey:"调查问卷",
+    hero_tag:"巴鲁克大学 · 基督徒团契",
+    hero_title:"信仰、<em>团契</em><br>与使命。",
+    hero_desc:"欢迎来到巴鲁克大学 CCF！同学们在这里相聚，共同探索信仰、建立友谊、携手成长。",
+    hero_cta:"查看我们的活动 &#8594;",
+    acts_eye:"我们的活动", acts_title:"近期动态",
+    acts_sub:"本周聚会，以及过去和即将到来的活动一览。",
+    survey_eye:"加入我们", survey_title:"填写问卷",
+    survey_sub:"填写这份简短问卷，我们将很快与你联系。",
+    survey_card_title:"我们想认识你",
+    survey_card_body:"无论你是第一次接触信仰，还是在寻找一个温暖的团体，这里欢迎你。",
+    sf_fname:"名字 *", sf_lname:"姓氏", sf_email:"邮箱 *",
+    sf_year:"年级", sf_select:"-- 请选择 --",
+    sf_fresh:"大一", sf_soph:"大二", sf_jr:"大三", sf_sr:"大四", sf_grad:"研究生",
+    sf_interest:"我感兴趣的是…",
+    si_bible:"圣经查经", si_worship:"敬拜赞美",
+    si_social:"社交活动", si_serve:"服务与外展",
+    sf_msg:"还有什么想说的？", sf_submit:"发送",
+    ss_title:"谢谢你！", ss_body:"我们会尽快联系你，期待在下次聚会见到你！",
+    about_eye:"我们是谁", about_eye2:"Baruch CCF",
+    about_title:"我们的故事", about_heading:"在信仰中共同成长",
+    about_body:"Baruch CCF（基督徒文化团契）是巴鲁克学院 CUNY 的学生自治社团，欢迎各背景的同学加入。",
+    f1t:"每周查经", f1d:"每周五，在温馨开放的氛围中一同研读圣经。",
+    f2t:"团契与友谊", f2d:"通过共餐、活动和祷告，建立终生难忘的友谊。",
+    f3t:"外展与服务", f3d:"全年为巴鲁克校园和纽约市社区提供服务。",
+    net_title:"CCF 网络的一部分",
+    net_body:"巴鲁克 CCF 是遍布纽约多所大学的 CCF 网络分支，与更大的学生大家庭紧密相连。",
+    mem_eye:"我们的团队", mem_title:"认识我们的成员",
+    mem_sub:"一群热爱信仰、团契与服务的学生领袖。",
+    ft_tag:"巴鲁克学院 CUNY 的信仰与友谊共同体。",
+    ft_nav:"页面导航", ft_connect:"联系我们", ft_home:"首页",
+    ft_copy:"&#169; 2025 Baruch CCF 社团 版权所有。",
+    ft_love:"用心制作于巴鲁克"
+  }
+};
+
+var lang = "en";
+
+function applyLang(l) {
+  var p = i18n[l];
+  var els = document.querySelectorAll("[data-i18n]");
+  for (var i = 0; i < els.length; i++) {
+    var k = els[i].getAttribute("data-i18n");
+    if (p[k] !== undefined) els[i].innerHTML = p[k];
+  }
+  document.getElementById("lang-toggle").innerHTML = l === "en" ? "中文" : "English";
+  if (document.getElementById("acts-track")) { renderActivities(); }
+  renderMembers();
+}
+
+function toggleLang() {
+  lang = lang === "en" ? "zh" : "en";
+  applyLang(lang);
+}
+
+
+/* =============================================================
+   2. 活动数据 / ACTIVITIES DATA
+   ⚠️ 每次只需改 date 字段（格式 YYYY-MM-DD），系统自动判断：
+      - 距今超过 7 天的过去  → 左侧，半透明缩小
+      - 距今前后 7 天以内   → 中间大卡（本周）
+      - 距今超过 7 天的未来  → 右侧，半透明缩小
+   ⚠️ 每周第一次打开自动跳到本周活动；当周内手动翻页状态会保留
+   ⚠️ desc_en 和 desc_zh 完全独立，可以写不同内容
+   ⚠️ img 填图片 URL，留空显示 icon 占位图
+============================================================= */
+var activitiesData = [
+  {
+    id: "event1",
+    title_en: "Spring Kickoff Gathering",
+    title_zh: "春季开学聚会",
+    date: "2025-02-07",
+    desc_en: "We kicked off the semester with worship, ice-breakers, and a shared meal. Great to see new and returning faces!",
+    desc_zh: "以敬拜、破冰游戏和共餐开启新学期，新老成员齐聚一堂，气氛超好！",
+    img: "",
+    icon: "&#127807;"
+  },
+  {
+    id: "event2",
+    title_en: "Bible Study: John Chapter 1",
+    title_zh: "查经：约翰福音第一章",
+    date: "2025-02-14",
+    desc_en: "A deep dive into the opening of John's Gospel. Lively discussion on who Jesus is and why it matters.",
+    desc_zh: "深入研读约翰福音开篇，大家分享了各自对道成肉身的理解，讨论超级热烈！",
+    img: "",
+    icon: "&#128214;"
+  },
+  {
+    id: "event3",
+    title_en: "Campus Outreach Day",
+    title_zh: "校园外展日",
+    date: "2025-02-21",
+    desc_en: "We set up a table on campus to share free Bibles and connect with students about faith.",
+    desc_zh: "在校园摆摊派发免费圣经，和好多路过的同学聊天，有几个当场留下了联系方式！",
+    img: "",
+    icon: "&#127757;"
+  },
+  {
+    id: "event4",
+    title_en: "Weekly Fellowship - Worship Night",
+    title_zh: "本周团契 - 敬拜之夜",
+    date: "2025-03-07",
+    desc_en: "Join us for an evening of worship, prayer, and community. All welcome, no experience needed.",
+    desc_zh: "本周五晚来一起敬拜吧！不管你是第一次来还是老朋友，都超欢迎。唱歌、祷告、聊天，最后还有奶茶！",
+    img: "",
+    icon: "&#9835;"
+  },
+  {
+    id: "event5",
+    title_en: "Easter Celebration",
+    title_zh: "复活节庆典",
+    date: "2025-04-18",
+    desc_en: "A special gathering to celebrate Easter together with praise, message, and a festive meal.",
+    desc_zh: "复活节特别聚会！有敬拜、有分享、还有大餐，一起来庆祝这个最重要的节日！",
+    img: "",
+    icon: "&#10013;"
+  },
+  {
+    id: "event6",
+    title_en: "End-of-Semester Banquet",
+    title_zh: "期末感恩宴",
+    date: "2025-05-09",
+    desc_en: "Celebrate the semester with the whole CCF family with food, fun, and heartfelt farewells.",
+    desc_zh: "学期最后一聚！和大家一起吃好吃的、聊这学期的回忆，然后依依不舍地说再见。",
+    img: "",
+    icon: "&#127881;"
+  }
+  /*
+  ⚠️ 新增活动：在上面最后一个 } 后加逗号，复制下面格式粘贴进来，不需要写 type
+  ,{
+    id: "event7",
+    title_en: "New Event",
+    title_zh: "新活动",
+    date: "2025-06-06",
+    desc_en: "Description in English.",
+    desc_zh: "中文描述。",
+    img: "",
+    icon: "&#127807;"
+  }
+  */
+];
+
+
+/* =============================================================
+   自动日期分类 — 运行一次
+============================================================= */
+(function classifyDates() {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  for (var i = 0; i < activitiesData.length; i++) {
+    var ev = activitiesData[i];
+    ev.dateObj  = new Date(ev.date + "T00:00:00");
+    ev.diffDays = Math.round((ev.dateObj - today) / 86400000);
+  }
+  var candidates = activitiesData.filter(function(ev) { return Math.abs(ev.diffDays) <= 7; });
+  var currentEv  = null;
+  if (candidates.length > 0) {
+    currentEv = candidates.reduce(function(a, b) {
+      return Math.abs(a.diffDays) <= Math.abs(b.diffDays) ? a : b;
+    });
+  }
+  for (var j = 0; j < activitiesData.length; j++) {
+    var e = activitiesData[j];
+    if (currentEv && e.id === currentEv.id) { e.type = "current"; }
+    else if (e.diffDays < 0) { e.type = "past"; }
+    else { e.type = "upcoming"; }
+  }
+})();
+
+/* 按日期从旧到新排好，作为线性轨道 */
+var sortedActs = activitiesData.slice().sort(function(a, b) { return a.dateObj - b.dateObj; });
+
+/* =============================================================
+   每周自动定位中心索引（用 localStorage 记住本周翻页位置）
+============================================================= */
+function getWeekKey() {
+  var d    = new Date();
+  var jan1 = new Date(d.getFullYear(), 0, 1);
+  var week = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+  return d.getFullYear() + "-W" + week;
+}
+
+var centerIdx = 0;
+
+(function initCenterIdx() {
+  var weekKey = getWeekKey();
+  var saved   = null;
+  try { saved = localStorage.getItem("ccf-acts-week"); } catch(e) {}
+
+  if (saved === weekKey) {
+    /* 同一周：恢复上次翻页位置 */
+    try {
+      var si = parseInt(localStorage.getItem("ccf-acts-idx") || "0");
+      centerIdx = Math.min(Math.max(si, 0), sortedActs.length - 1);
+    } catch(e) {}
+  } else {
+    /* 新的一周：自动跳到 current 活动；没有则找最近的 past */
+    var best = 0;
+    for (var i = 0; i < sortedActs.length; i++) {
+      if (sortedActs[i].type === "current") { best = i; break; }
+    }
+    if (sortedActs[best].type !== "current") {
+      for (var j = sortedActs.length - 1; j >= 0; j--) {
+        if (sortedActs[j].type === "past") { best = j; break; }
+      }
+    }
+    centerIdx = best;
+    try {
+      localStorage.setItem("ccf-acts-week", weekKey);
+      localStorage.setItem("ccf-acts-idx",  String(centerIdx));
+    } catch(e) {}
+  }
+})();
+
+
+/* =============================================================
+   渲染与滑动
+============================================================= */
+function fmtDate(ev) {
+  var d = ev.dateObj;
+  if (lang === "zh") {
+    return d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+  }
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+/* 根据与 centerIdx 的距离决定 slot 类 */
+function slotClass(i) {
+  var dist = Math.abs(i - centerIdx);
+  if (dist === 0) return "slot-center";
+  if (dist === 1) return "slot-side";
+  return "slot-far";
+}
+
+/* 生成单张卡 HTML */
+function makeCardHTML(ev) {
+  var title = lang === "zh" ? ev.title_zh : ev.title_en;
+  var desc  = lang === "zh" ? ev.desc_zh  : ev.desc_en;
+  var tags  = {
+    current:  lang === "zh" ? "本周"  : "This Week",
+    past:     lang === "zh" ? "往期"  : "Past",
+    upcoming: lang === "zh" ? "即将"  : "Upcoming"
+  };
+  var imgH = ev.img
+    ? "<img class='act-img' src='" + ev.img + "' alt='" + title + "' loading='lazy'>"
+    : "<div class='act-placeholder'>" + (ev.icon || "&#9733;") + "</div>";
+  return "<div class='act-card'>" +
+    "<div class='act-img-wrap'>" + imgH + "</div>" +
+    "<div class='act-body'>" +
+      "<div class='act-tag " + ev.type + "'>" + tags[ev.type] + "</div>" +
+      "<div class='act-date'>&#128197; " + fmtDate(ev) + "</div>" +
+      "<h3 class='act-title'>" + title + "</h3>" +
+      "<p class='act-desc'>" + desc + "</p>" +
+    "</div></div>";
+}
+
+/* 渲染整条轨道 */
+function renderActivities() {
+  var track = document.getElementById("acts-track");
+  if (!track) return;
+  var html = "";
+  for (var i = 0; i < sortedActs.length; i++) {
+    html += "<div class='act-slot " + slotClass(i) + "' data-idx='" + i + "'>" +
+              makeCardHTML(sortedActs[i]) +
+            "</div>";
+  }
+  track.innerHTML = html;
+
+  /* 点击侧边卡跳转 */
+  var slots = track.querySelectorAll(".act-slot");
+  for (var s = 0; s < slots.length; s++) {
+    (function(el) {
+      el.addEventListener("click", function() {
+        var idx = parseInt(this.getAttribute("data-idx"));
+        if (idx !== centerIdx) { centerIdx = idx; applyCenter(); }
+      });
+    })(slots[s]);
+  }
+  applyCenter();
+  renderActsDots();
+}
+
+/* 更新 slot 类并平滑 translateX 到中心 */
+function applyCenter() {
+  var track = document.getElementById("acts-track");
+  if (!track) return;
+  var vp    = track.parentElement;
+  var slots = track.querySelectorAll(".act-slot");
+
+  /* 更新 slot 类 */
+  for (var i = 0; i < slots.length; i++) {
+    slots[i].className = "act-slot " + slotClass(i);
+  }
+
+  /* 读当前 translateX（CSS transition 中途调用也能正确接续） */
+  var style  = window.getComputedStyle(track);
+  var matrix = style.transform;
+  var curTX  = 0;
+  if (matrix && matrix !== "none") {
+    var vals = matrix.match(/matrix.*\((.+)\)/);
+    if (vals) {
+      var parts = vals[1].split(",");
+      curTX = parseFloat(parts[4]) || 0;
+    }
+  }
+
+  /* 目标：把 centerIdx 槽的中心对齐视口中心 */
+  var centerSlot = slots[centerIdx];
+  if (!centerSlot) return;
+  var vpRect   = vp.getBoundingClientRect();
+  var slotRect = centerSlot.getBoundingClientRect();
+  var delta    = (vpRect.left + vpRect.width / 2) - (slotRect.left + slotRect.width / 2);
+  track.style.transform = "translateX(" + (curTX + delta) + "px)";
+
+  /* 记住位置 */
+  try { localStorage.setItem("ccf-acts-idx", String(centerIdx)); } catch(e) {}
+  renderActsDots();
+}
+
+/* 左右翻页 */
+function actsNav(dir) {
+  var next = centerIdx + dir;
+  if (next < 0 || next >= sortedActs.length) return;
+  centerIdx = next;
+  applyCenter();
+}
+
+/* 指示点 */
+function renderActsDots() {
+  var c = document.getElementById("acts-dots");
+  if (!c) return;
+  c.innerHTML = "";
+  for (var i = 0; i < sortedActs.length; i++) {
+    var d = document.createElement("button");
+    d.className = "acts-dot" + (i === centerIdx ? " active" : "");
+    d.setAttribute("data-idx", i);
+    d.onclick = function() {
+      centerIdx = parseInt(this.getAttribute("data-idx"));
+      applyCenter();
+    };
+    c.appendChild(d);
+  }
+}
+
+/* 触摸滑动 */
+var actsTouchX = 0;
+
+
+/* =============================================================
+   3. 成员数据 / MEMBERS DATA
+   ⚠️ name   = 替换为真实姓名
+   ⚠️ avatar = 填头像图片 URL，留空显示首字母
+   ⚠️ bio_en 和 bio_zh 完全独立，不是翻译关系
+============================================================= */
+var members = [
+  {
+    role_en: "Chapter Advisor", role_zh: "校外顾问",
+    name: "Advisor",
+    avatar: "",
+    bio_en: "Our advisor guides Baruch CCF with wisdom and spiritual mentorship, representing the CCF network.",
+    bio_zh: "以智慧和属灵关怀引领巴鲁克 CCF，代表 CCF 多校区网络为我们提供支持。",
+    gold: true
+  },
+  {
+    role_en: "Former President", role_zh: "前任社长",
+    name: "FormerPresident",
+    avatar: "",
+    bio_en: "Led Baruch CCF with vision and dedication, building a strong foundation that shapes our community today.",
+    bio_zh: "以远见与奉献精神带领巴鲁克 CCF，为社团建立坚实的信仰与团契基础，其影响延续至今。",
+    gold: false
+  },
+  {
+    role_en: "President", role_zh: "现任社长",
+    name: "President",
+    avatar: "",
+    bio_en: "Passionate about growing a vibrant, Christ-centered community at Baruch and connecting students to genuine fellowship.",
+    bio_zh: "致力于在巴鲁克学院培育充满活力、以基督为中心的社团，帮助同学们找到真实的团契与人生意义。",
+    gold: true
+  },
+  {
+    role_en: "Vice President", role_zh: "副社长",
+    name: "VicePresident",
+    avatar: "",
+    bio_en: "Supports club leadership in day-to-day operations and bridges our community with the wider CCF network.",
+    bio_zh: "协助社长处理日常事务，在巴鲁克社团与更广泛的 CCF 网络之间搭建桥梁。",
+    gold: false
+  },
+  {
+    role_en: "Secretary", role_zh: "秘书",
+    name: "Secretary",
+    avatar: "",
+    bio_en: "Keeps the club running smoothly -- managing communications, meeting notes, and event coordination.",
+    bio_zh: "负责社团日常运作：通讯管理、会议记录与活动协调，细心高效。",
+    gold: false
+  },
+  {
+    role_en: "Treasurer", role_zh: "财务",
+    name: "Treasurer",
+    avatar: "",
+    bio_en: "Manages club finances with integrity, ensuring every resource serves our mission.",
+    bio_zh: "以诚信与细心管理社团财务，确保每一分资源都用于服务我们的使命。",
+    gold: false
+  }
+];
+
+function renderMembers() {
+  var g = document.getElementById("members-grid");
+  if (!g) return;
+  g.innerHTML = "";
+  var delays = ["", "d1", "d2", "d3", "d4", "d5"];
+  for (var i = 0; i < members.length; i++) {
+    var m    = members[i];
+    var role = lang === "zh" ? m.role_zh : m.role_en;
+    var bio  = lang === "zh" ? m.bio_zh  : m.bio_en;
+    var av   = m.avatar
+      ? "<img src='" + m.avatar + "' alt='" + m.name + "' loading='lazy'>"
+      : "<div class='avatar-ph'>" + m.name.charAt(0) + "</div>";
+    var gc   = m.gold ? " gold" : "";
+    g.innerHTML +=
+      "<div class='member-card reveal " + delays[i % 6] + gc + "'>" +
+        "<div class='member-role'>" + role + "</div>" +
+        "<div class='member-avatar'>" + av + "</div>" +
+        "<h3 class='member-name'>" + m.name + "</h3>" +
+        "<p class='member-bio'>" + bio + "</p>" +
+      "</div>";
+  }
+  setTimeout(initReveal, 60);
+}
+
+
+/* =============================================================
+   4. PAGE SWITCHER
+============================================================= */
+function showPage(page) {
+  document.getElementById("page-home").style.display  = page === "home"  ? "block" : "none";
+  document.getElementById("page-about").style.display = page === "about" ? "block" : "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (page === "about") { renderMembers(); setTimeout(initReveal, 80); }
+}
+
+function scrollToId(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+
+/* =============================================================
+   5. HERO CAROUSEL
+============================================================= */
+var slides    = document.querySelectorAll(".hero-slide");
+var totalSl   = slides.length;
+var curSl     = 0;
+var heroTimer = null;
+var dotsEl    = document.getElementById("hero-dots");
+
+for (var hi = 0; hi < totalSl; hi++) {
+  (function(idx) {
+    var d = document.createElement("button");
+    d.className = "hero-dot" + (idx === 0 ? " active" : "");
+    d.onclick = function() { heroGoTo(idx); };
+    dotsEl.appendChild(d);
+  })(hi);
+}
+
+function heroGoTo(idx) {
+  slides[curSl].classList.remove("active");
+  dotsEl.children[curSl].classList.remove("active");
+  curSl = (idx + totalSl) % totalSl;
+  slides[curSl].classList.add("active");
+  dotsEl.children[curSl].classList.add("active");
+  clearTimeout(heroTimer);
+  heroSchedule();
+}
+function heroNav(d) { heroGoTo(curSl + d); }
+function heroSchedule() {
+  var s = slides[curSl];
+  if (s.getAttribute("data-type") === "video") {
+    var v = s.querySelector("video");
+    if (v) {
+      v.currentTime = 0;
+      v.play().catch(function(){});
+      v.onended = function() { heroGoTo(curSl + 1); };
+      heroTimer = setTimeout(function() { heroGoTo(curSl + 1); }, 30000);
+    }
+  } else {
+    heroTimer = setTimeout(function() { heroGoTo(curSl + 1); }, 5000);
+  }
+}
+heroSchedule();
+
+var heroTouchX = 0;
+document.getElementById("hero").addEventListener("touchstart", function(e) {
+  heroTouchX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById("hero").addEventListener("touchend", function(e) {
+  var dx = e.changedTouches[0].clientX - heroTouchX;
+  if (Math.abs(dx) > 50) heroNav(dx < 0 ? 1 : -1);
+}, { passive: true });
+
+
+/* =============================================================
+   6. SURVEY SUBMIT
+   ⚠️ 接入真实邮件服务：取消注释 fetch 那行，填入 Formspree ID
+============================================================= */
+function submitSurvey() {
+  var fname = document.getElementById("f-fname").value.trim();
+  var email = document.getElementById("f-email").value.trim();
+  if (!fname || !email) {
+    alert(lang === "zh" ? "请填写姓名和邮箱。" : "Please fill in your name and email.");
+    return;
+  }
+  /* fetch("https://formspree.io/f/YOUR_ID", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name: fname, email: email})
+  }); */
+  document.querySelector(".btn-submit").style.display = "none";
+  document.getElementById("survey-success").style.display = "block";
+}
+
+
+/* =============================================================
+   7. SCROLL REVEAL
+============================================================= */
+function initReveal() {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  var revels = document.querySelectorAll(".reveal");
+  for (var i = 0; i < revels.length; i++) {
+    revels[i].classList.remove("visible");
+    obs.observe(revels[i]);
+  }
+}
+
+
+/* =============================================================
+   8. INIT
+============================================================= */
+window.addEventListener("DOMContentLoaded", function() {
+  showPage("home");
+  renderActivities();           /* 渲染所有活动卡 */
+  setTimeout(applyCenter, 60); /* 等布局稳定后精确居中 */
+  applyLang("en");
+  initReveal();
+
+  /* 活动区触摸滑动 */
+  var actsVP = document.getElementById("acts-track");
+  if (actsVP) {
+    actsVP.addEventListener("touchstart", function(e) { actsTouchX = e.touches[0].clientX; }, { passive: true });
+    actsVP.addEventListener("touchend",   function(e) {
+      var dx = e.changedTouches[0].clientX - actsTouchX;
+      if (Math.abs(dx) > 40) actsNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+
+  /* 窗口缩放时重新居中 */
+  window.addEventListener("resize", function() { applyCenter(); });
+
+  /* 导航栏滚动阴影 */
+  window.addEventListener("scroll", function() {
+    var nb = document.getElementById("navbar");
+    if (window.scrollY > 50) nb.classList.add("scrolled");
+    else nb.classList.remove("scrolled");
+  });
+});
+</script>
+</body>
+</html>
