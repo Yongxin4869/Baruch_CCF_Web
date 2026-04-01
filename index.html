@@ -511,9 +511,9 @@ var CONFIG = {
     images: [
       // ⚠️ 替换为活动大图 URL，可以增减行数
       // 建议尺寸：1920x1080 或更大，横幅风格
-      "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1600",  // 活动照片 1
-      "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=1600",  // 活动照片 2
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600"   // 活动照片 3
+      "image/showcase1",  // 活动照片 1
+      "image/showcase2",  // 活动照片 2
+      "image/showcase3"   // 活动照片 3
     ]
   },
 
@@ -539,27 +539,27 @@ var CONFIG = {
   members: {
     advisor: {
       photo: "image/advisor.jpg",          // ⚠️ 校外顾问头像 URL
-      name:  "Advisor"    // ⚠️ 替换为真实姓名
+      name:  "Ray"    // ⚠️ 替换为真实姓名
     },
     formerPresident: {
       photo: "image/former-president.jpg",          // ⚠️ 前任社长头像 URL
-      name:  "FormerPresident"
+      name:  "Alex"
     },
     president: {
       photo: "image/president.jpg",          // ⚠️ 现任社长头像 URL
-      name:  "President"
+      name:  "Yuning Sun"
     },
     vicePresident: {
-      photo: "",          // ⚠️ 副社长头像 URL
-      name:  "VicePresident"
+      photo: "image/vice-president.jpg",          // ⚠️ 副社长头像 URL
+      name:  "Jiaqi Liu"
     },
     secretary: {
-      photo: "",          // ⚠️ 秘书头像 URL
-      name:  "Secretary"
+      photo: "image/Secretary.png",          // ⚠️ 秘书头像 URL
+      name:  "Yongxin Liu"
     },
     treasurer: {
-      photo: "",          // ⚠️ 财务头像 URL
-      name:  "Treasurer"
+      photo: "image/treasurer.jpg",          // ⚠️ 财务头像 URL
+      name:  "Eliane Huang"
     }
   },
 
@@ -586,7 +586,7 @@ var CONFIG = {
     {
       id: "event1",
       date: "2025-02-07",         // ⚠️ 改日期
-      img:  "",                   // ⚠️ 填活动照片 URL
+      img:  "image/event1",                   // ⚠️ 填活动照片 URL
       icon: "&#127807;",
       title_en: "Spring Kickoff Gathering",
       title_zh: "春季开学聚会",
@@ -596,7 +596,7 @@ var CONFIG = {
     {
       id: "event2",
       date: "2025-02-14",
-      img:  "",
+      img:  "image/event2",
       icon: "&#128214;",
       title_en: "Bible Study: John Chapter 1",
       title_zh: "查经：约翰福音第一章",
@@ -606,7 +606,7 @@ var CONFIG = {
     {
       id: "event3",
       date: "2025-02-21",
-      img:  "",
+      img:  "image/event3",
       icon: "&#127757;",
       title_en: "Campus Outreach Day",
       title_zh: "校园外展日",
@@ -616,7 +616,7 @@ var CONFIG = {
     {
       id: "event4",
       date: "2025-03-07",         // ⚠️ 每周更新这个日期
-      img:  "",
+      img:  "image/event4",
       icon: "&#9835;",
       title_en: "Weekly Fellowship - Worship Night",
       title_zh: "本周团契 - 敬拜之夜",
@@ -626,7 +626,7 @@ var CONFIG = {
     {
       id: "event5",
       date: "2025-04-18",
-      img:  "",
+      img:  "image/event1",
       icon: "&#10013;",
       title_en: "Easter Celebration",
       title_zh: "复活节庆典",
@@ -636,7 +636,7 @@ var CONFIG = {
     {
       id: "event6",
       date: "2025-05-09",
-      img:  "",
+      img:  "image/event4",
       icon: "&#127881;",
       title_en: "End-of-Semester Banquet",
       title_zh: "期末感恩宴",
@@ -998,7 +998,7 @@ var actsTouchX = 0;
    成员：从 CONFIG.members 读取姓名和头像
 ============================================================ */
 var membersDefinition = [
-  { key: "advisor",        role_en:"Chapter Advisor",  role_zh:"校外顾问",  gold:true,
+  { key: "advisor",        role_en:"Advisor",  role_zh:"校外顾问",  gold:true,
     bio_en:"Our advisor guides Baruch CCF with wisdom and spiritual mentorship, representing the CCF network.",
     bio_zh:"以智慧和属灵关怀引领巴鲁克 CCF，代表 CCF 多校区网络为我们提供支持。" },
   { key: "formerPresident",role_en:"Former President", role_zh:"前任社长",  gold:false,
@@ -1006,13 +1006,13 @@ var membersDefinition = [
     bio_zh:"以远见与奉献精神带领巴鲁克 CCF，为社团建立坚实的信仰与团契基础，其影响延续至今。" },
   { key: "president",      role_en:"President",        role_zh:"现任社长",  gold:true,
     bio_en:"Passionate about growing a vibrant, Christ-centered community at Baruch and connecting students to genuine fellowship.",
-    bio_zh:"致力于在巴鲁克学院培育充满活力、以基督为中心的社团，帮助同学们找到真实的团契与人生意义。" },
+    bio_zh:"银烛秋光冷画屏，轻罗小扇扑流萤。天阶夜色凉如水，我是社长孙钰柠。" },
   { key: "vicePresident",  role_en:"Vice President",   role_zh:"副社长",    gold:false,
     bio_en:"Supports club leadership in day-to-day operations and bridges our community with the wider CCF network.",
     bio_zh:"协助社长处理日常事务，在巴鲁克社团与更广泛的 CCF 网络之间搭建桥梁。" },
   { key: "secretary",      role_en:"Secretary",        role_zh:"秘书",      gold:false,
-    bio_en:"Keeps the club running smoothly -- managing communications, meeting notes, and event coordination.",
-    bio_zh:"负责社团日常运作：通讯管理、会议记录与活动协调，细心高效。" },
+    bio_en:"Hi, I'm Yongxin. Keeps the club running smoothly. Nice to see you guys!",
+    bio_zh:"大家好，我叫永鑫。我是社团一块砖，哪里需要哪里搬！" },
   { key: "treasurer",      role_en:"Treasurer",        role_zh:"财务",      gold:false,
     bio_en:"Manages club finances with integrity, ensuring every resource serves our mission.",
     bio_zh:"以诚信与细心管理社团财务，确保每一分资源都用于服务我们的使命。" }
