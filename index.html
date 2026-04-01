@@ -313,8 +313,8 @@ img{display:block;max-width:100%}
     <!-- 影院式视口：JS 动态渲染卡片并控制 translateX -->
     <div class="acts-viewport">
       <div class="acts-track" id="acts-track"></div>
-      <button class="acts-arrow acts-arrow-l" onclick="actsNav(-1)">&#8249;</button>
-      <button class="acts-arrow acts-arrow-r" onclick="actsNav(1)">&#8250;</button>
+      <button class="acts-arrow acts-arrow-l" onclick="actsNavWithReset(-1)">&#8249;</button>
+      <button class="acts-arrow acts-arrow-r" onclick="actsNavWithReset(1)">&#8250;</button>
     </div>
     <div class="acts-dots" id="acts-dots"></div>
   </section>
@@ -942,6 +942,75 @@ function renderActivities() {
   });
   applyCenter(); renderActsDots();
 }
+
+// ========== 自动轮播功能 ==========
+var autoPlayInterval = null;
+var autoPlayDelay = 5000; // 5秒切换一次（可以改这个数字）
+
+function startAutoPlay() {
+  if (autoPlayInterval) clearInterval(autoPlayInterval);
+  autoPlayInterval = setInterval(function() {
+    // 自动切换到下一张
+    actsNav(1);
+  }, autoPlayDelay);
+}
+
+function stopAutoPlay() {
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    autoPlayInterval = null;
+  }
+}
+
+// 鼠标悬停时暂停自动轮播
+document.addEventListener("DOMContentLoaded", function() {
+  var track = document.getElementById("acts-track");
+  if (track) {
+    track.addEventListener("mouseenter", stopAutoPlay);
+    track.addEventListener("mouseleave", startAutoPlay);
+    
+    // 触摸屏设备：手指触摸时暂停
+    track.addEventListener("touchstart", stopAutoPlay);
+    track.addEventListener("touchend", startAutoPlay);
+  }
+  
+  // 启动自动轮播
+  startAutoPlay();
+});
+
+// 当用户手动点击切换时，重置计时器
+function actsNavWithReset(dir) {
+  actsNav(dir);
+  // 重置自动轮播计时
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    startAutoPlay();
+  }
+}
+
+// 替换原来的 actsNav 函数
+// 找到原来的 actsNav 函数，把它改成这样：
+// function actsNav(dir) {
+//   var next = centerIdx + dir;
+//   if (next >= 0 && next < sortedActs.length) { 
+//     centerIdx = next; 
+//     applyCenter(); 
+//   }
+// }
+// 然后添加下面这个新函数
+function actsNavWithReset(dir) {
+  var next = centerIdx + dir;
+  if (next >= 0 && next < sortedActs.length) {
+    centerIdx = next;
+    applyCenter();
+  }
+  // 重置自动轮播计时器
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    startAutoPlay();
+  }
+}
+  
 function applyCenter() {
   var track = document.getElementById("acts-track");
   if (!track) return;
@@ -976,7 +1045,15 @@ function renderActsDots() {
     var d = document.createElement("button");
     d.className = "acts-dot"+(i===centerIdx?" active":"");
     d.setAttribute("data-idx", i);
-    d.onclick = function() { centerIdx = parseInt(this.getAttribute("data-idx")); applyCenter(); };
+    d.onclick = function() { 
+  centerIdx = parseInt(this.getAttribute("data-idx")); 
+  applyCenter();
+  // 重置自动轮播
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    startAutoPlay();
+  }
+};
     c.appendChild(d);
   });
 }
