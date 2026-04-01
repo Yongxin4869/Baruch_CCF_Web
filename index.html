@@ -311,7 +311,7 @@ img{display:block;max-width:100%}
     overflow-x:hidden
   }
   
-  /* ========== Survey 手机端修复 ========== */
+  /* Survey 手机端修复 */
   #survey {
     padding: 48px 4%;
   }
@@ -352,10 +352,17 @@ img{display:block;max-width:100%}
     font-size: 0.75rem;
   }
   .chk-group {
-    gap: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   .chk {
     font-size: 0.75rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .chk input {
+    flex-shrink: 0;
   }
   .btn-submit {
     padding: 12px;
@@ -372,7 +379,7 @@ img{display:block;max-width:100%}
     font-size: 0.75rem;
   }
   
-  /* ========== About 页面手机端修复 ========== */
+  /* About 页面修复 */
   #about-section {
     padding: 48px 4%;
   }
@@ -382,10 +389,6 @@ img{display:block;max-width:100%}
   .about-text .section-title {
     font-size: 1.3rem;
   }
-  .about-text .section-sub {
-    font-size: 0.8rem;
-    margin-bottom: 20px !important;
-  }
   .feat {
     padding: 10px 12px;
   }
@@ -394,26 +397,11 @@ img{display:block;max-width:100%}
     height: 28px;
     font-size: 0.75rem;
   }
-  .feat h4 {
-    font-size: 0.8rem;
-  }
-  .feat p {
-    font-size: 0.7rem;
-  }
   .network-banner {
     padding: 12px 14px;
   }
-  .network-icon {
-    font-size: 1.2rem;
-  }
-  .network-banner h4 {
-    font-size: 0.8rem;
-  }
-  .network-banner p {
-    font-size: 0.7rem;
-  }
   
-  /* ========== Members 手机端修复 ========== */
+  /* Members 修复 */
   #members-section {
     padding: 48px 4%;
   }
@@ -433,11 +421,6 @@ img{display:block;max-width:100%}
   }
   .member-bio {
     font-size: 0.65rem;
-    line-height: 1.4;
-  }
-  .member-role {
-    font-size: 0.55rem;
-    padding: 2px 8px;
   }
 }
 </style>
