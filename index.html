@@ -188,7 +188,25 @@ img{display:block;max-width:100%}
   .slot-side,.slot-far{display:none}
   .slot-center{width:88%;margin:0 auto}
   .acts-arrow-l{left:4px}.acts-arrow-r{right:4px}
+  
+  /* 修复活动卡片图片大小 */
+  .slot-center .act-img-wrap {
+    aspect-ratio: 16/10;
+  }
+  .act-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .slot-center .act-title {
+    font-size: 1.2rem;
+  }
+  .act-desc {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
 }
+  
 #page-about{display:none}
 #about-section{background:var(--white);padding:96px 8%}
 .about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
@@ -254,7 +272,45 @@ img{display:block;max-width:100%}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
 @media(max-width:960px){#navbar{padding:0 22px}.about-grid{grid-template-columns:1fr;gap:40px}.survey-wrap{grid-template-columns:1fr;gap:40px}}
-@media(max-width:700px){.acts-stage{grid-template-columns:1fr}.act-card.side{display:none}.nav-links>li>a,.nav-links>li>button{padding:7px 9px;font-size:.78rem}#hero-content{left:5%}.footer-inner{flex-direction:column}}
+@media(max-width:700px){
+  .acts-stage{grid-template-columns:1fr}
+  .act-card.side{display:none}
+  .nav-links>li>a,.nav-links>li>button{
+    padding:5px 6px;
+    font-size:0.7rem;
+    white-space:nowrap
+  }
+  #hero-content{
+    left:5%;
+    right:5%;
+    max-width:90%
+  }
+  .footer-inner{
+    flex-direction:column
+  }
+  #navbar{
+    padding:0 12px
+  }
+  .logo-text{
+    font-size:0.9rem
+  }
+  .logo-mark{
+    width:28px;
+    height:28px;
+    font-size:0.65rem
+  }
+  #lang-toggle{
+    padding:4px 8px;
+    font-size:0.65rem;
+    white-space:nowrap
+  }
+  .nav-links{
+    gap:0
+  }
+  body{
+    overflow-x:hidden
+  }
+}
 </style>
 </head>
 <body>
@@ -998,53 +1054,6 @@ function resetAutoPlay() {
   startAutoPlay();
 }
 var actsTouchX = 0;
-
-// ========== 自动轮播功能 ==========
-var autoPlayInterval = null;
-var autoPlayDelay = 5000; // 5秒切换一次
-
-function startAutoPlay() {
-  if (autoPlayInterval) clearInterval(autoPlayInterval);
-  autoPlayInterval = setInterval(function() {
-    actsNav(1);
-  }, autoPlayDelay);
-}
-
-function stopAutoPlay() {
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    autoPlayInterval = null;
-  }
-}
-
-function resetAutoPlay() {
-  stopAutoPlay();
-  startAutoPlay();
-}
-
-// ========== 自动轮播功能 ==========
-var autoPlayInterval = null;
-var autoPlayDelay = 5000; // 5秒切换一次
-
-function startAutoPlay() {
-  if (autoPlayInterval) clearInterval(autoPlayInterval);
-  autoPlayInterval = setInterval(function() {
-    actsNav(1);
-  }, autoPlayDelay);
-}
-
-function stopAutoPlay() {
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    autoPlayInterval = null;
-  }
-}
-
-function resetAutoPlay() {
-  stopAutoPlay();
-  startAutoPlay();
-}
-
 
 /* ============================================================
    About 页面图片：从 CONFIG 读取
