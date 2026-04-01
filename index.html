@@ -356,11 +356,12 @@ img{display:block;max-width:100%}
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .chk {
-    font-size: 0.75rem;
-    white-space: normal;
-    word-break: break-word;
-  }
+ .chk {
+  font-size: 0.75rem;
+  white-space: normal;
+  word-break: normal;      
+  overflow-wrap: break-word; 
+}
   .chk input {
     flex-shrink: 0;
   }
