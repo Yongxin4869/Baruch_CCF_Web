@@ -868,7 +868,15 @@ function applyCenter() {
 }
 function actsNav(dir) {
   var next = centerIdx + dir;
-  if (next >= 0 && next < sortedActs.length) { centerIdx = next; applyCenter(); resetAutoPlay(); }
+  // 改成循环：到末尾后回到开头，到开头后跳到末尾
+  if (next < 0) {
+    next = sortedActs.length - 1;
+  } else if (next >= sortedActs.length) {
+    next = 0;
+  }
+  centerIdx = next;
+  applyCenter();
+  resetAutoPlay();
 }
 function renderActsDots() {
   var c = document.getElementById("acts-dots");
