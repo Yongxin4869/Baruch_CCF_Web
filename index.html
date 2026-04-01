@@ -281,13 +281,11 @@ img{display:block;max-width:100%}
 
 <div id="page-home">
   <section id="hero">
-    <!-- ⚠️ 替换视频：改 src -->
     <div class="hero-slide active" data-type="video" data-index="0">
       <video autoplay muted playsinline>
         <source src="image/showcase.mp4" type="video/mp4">
       </video>
     </div>
-    <!-- ⚠️ 替换图片：改 style 里的 URL。可复制/删除整个 div 增减图片 -->
     <div class="hero-slide" data-type="image" data-index="1" style="background-image:url('image/showcase1.jpg')"></div>
     <div class="hero-slide" data-type="image" data-index="2" style="background-image:url('image/showcase2.jpg')"></div>
     <div class="hero-slide" data-type="image" data-index="3" style="background-image:url('image/showcase3.jpg')"></div>
@@ -310,11 +308,10 @@ img{display:block;max-width:100%}
       <h2 class="section-title" data-i18n="acts_title">What's Happening</h2>
       <p class="section-sub" data-i18n="acts_sub">This week's gathering, plus past and upcoming events.</p>
     </div>
-    <!-- 影院式视口：JS 动态渲染卡片并控制 translateX -->
     <div class="acts-viewport">
       <div class="acts-track" id="acts-track"></div>
-      <button class="acts-arrow acts-arrow-l" onclick="actsNavWithReset(-1)">&#8249;</button>
-      <button class="acts-arrow acts-arrow-r" onclick="actsNavWithReset(1)">&#8250;</button>
+      <button class="acts-arrow acts-arrow-l" onclick="actsNav(-1)">&#8249;</button>
+      <button class="acts-arrow acts-arrow-r" onclick="actsNav(1)">&#8250;</button>
     </div>
     <div class="acts-dots" id="acts-dots"></div>
   </section>
@@ -379,7 +376,6 @@ img{display:block;max-width:100%}
       <h2 class="section-title" data-i18n="about_title">Our Club Story</h2>
     </div>
     <div class="about-grid" style="margin-top:52px">
-      <!-- ⚠️ 替换社团照片：修改 .about-img 的 CSS background URL -->
       <div class="about-img reveal d1"></div>
       <div class="about-text reveal d2">
         <div class="section-eye" data-i18n="about_eye2">Baruch CCF</div>
@@ -440,7 +436,8 @@ img{display:block;max-width:100%}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 /* ╔══════════════════════════════════════════════════════════════╗
    ║          BARUCH CCF — 统一配置区 / MASTER CONFIG            ║
    ║  所有需要维护的内容都在这里，从上往下改完就行               ║
@@ -448,145 +445,61 @@ img{display:block;max-width:100%}
 
 var CONFIG = {
 
-  /* ============================================================
-     📬 GOOGLE SHEETS 表单接收
-     步骤：
-       1. 打开你的 Google Sheet
-       2. 点菜单 扩展程序 → Apps Script
-       3. 把下方注释里的代码粘贴进去，保存并点"部署 → 新增部署"
-       4. 选"网络应用程式"，权限选"所有人"，复制生成的 URL
-       5. 把 URL 粘贴到下面的 googleSheetURL 字段
-     注意：URL 格式类似 https://script.google.com/macros/s/xxx/exec
-     ============================================================
-
-     ── Apps Script 代码（粘到 Google Apps Script 编辑器里）──
-     function doPost(e) {
-       var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-       var data  = JSON.parse(e.postData.contents);
-       sheet.appendRow([
-         new Date(),
-         data.fname,
-         data.lname,
-         data.email,
-         data.year,
-         data.interests,
-         data.message
-       ]);
-       return ContentService
-         .createTextOutput(JSON.stringify({result:"ok"}))
-         .setMimeType(ContentService.MimeType.JSON);
-     }
-     ── 代码结束 ──
-  ============================================================ */
   googleSheetURL: "https://script.google.com/macros/s/AKfycbxYr-PsNpbI5dUu0USjWtFiQLYKJVYAqj482rehZXvr-4Akx80zXCrsrmjFQ-D8vfOeyw/exec",
-  // ⚠️ 填入你的 Apps Script 部署 URL，例如：
-  // googleSheetURL: "https://script.google.com/macros/s/AKfy.../exec",
 
-
-  /* ============================================================
-     🔗 外部链接
-  ============================================================ */
   links: {
     bible:     "https://www.bible.com/zh-CN/bible/48/JHN.1.CUNPSS-",
     instagram: "https://www.instagram.com/baruch.ccf/",
     email:     "ccf@baruch.cuny.edu"
-    // ⚠️ 修改上面三个链接即可，全站所有地方都会跟着更新
   },
 
-
-  /* ============================================================
-     🎬 HERO 首屏 — 视频 & 图片轮播素材
-     ── 视频 ──
-       src: 视频文件 URL（支持 mp4）
-     ── 图片 ──
-       每条 url 对应一张背景图，可以增减
-     ── 用途说明 ──
-       这里放社团活动的大图或宣传视频，用户进入网站第一眼看到的
-  ============================================================ */
   hero: {
     video: {
-      // ⚠️ 替换为你们的宣传视频 URL（mp4 格式）
       src: "image/showcase.mp4"
     },
     images: [
-      // ⚠️ 替换为活动大图 URL，可以增减行数
-      // 建议尺寸：1920x1080 或更大，横幅风格
-      "image/showcase1.jpg",  // 活动照片 1
-      "image/showcase2.jpg",  // 活动照片 2
-      "image/showcase3.jpg"   // 活动照片 3
+      "image/showcase1.jpg",
+      "image/showcase2.jpg",
+      "image/showcase3.jpg"
     ]
   },
 
-
-  /* ============================================================
-     📖 关于我们页面图片
-  ============================================================ */
   aboutPage: {
-    // ⚠️ 替换为社团合照或聚会现场照片
-    // 建议尺寸：800x600 或 4:3 比例
     mainPhoto: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900"
   },
 
-
-  /* ============================================================
-     👤 成员头像
-     ── 字段说明 ──
-       key:    职位标识，固定不变，程序用来匹配
-       photo:  头像图片 URL（留空显示姓名首字母）
-       name:   显示的姓名，⚠️ 改这里替换名字
-     建议尺寸：400x400，方形或圆形均可
-  ============================================================ */
   members: {
     advisor: {
-      photo: "image/advisor.jpg",          // ⚠️ 校外顾问头像 URL
-      name:  "Ray"    // ⚠️ 替换为真实姓名
+      photo: "image/advisor.jpg",
+      name:  "Ray"
     },
     formerPresident: {
-      photo: "image/former-president.jpg",          // ⚠️ 前任社长头像 URL
+      photo: "image/former-president.jpg",
       name:  "Alex"
     },
     president: {
-      photo: "image/president.jpg",          // ⚠️ 现任社长头像 URL
+      photo: "image/president.jpg",
       name:  "Yuning Sun"
     },
     vicePresident: {
-      photo: "image/vice-president.jpg",          // ⚠️ 副社长头像 URL
+      photo: "image/vice-president.jpg",
       name:  "Jiaqi Liu"
     },
     secretary: {
-      photo: "image/Secretary.png",          // ⚠️ 秘书头像 URL
+      photo: "image/Secretary.png",
       name:  "Yongxin Liu"
     },
     treasurer: {
-      photo: "image/treasurer.jpg",          // ⚠️ 财务头像 URL
+      photo: "image/treasurer.jpg",
       name:  "Eliane Huang"
     }
   },
 
-
-  /* ============================================================
-     📅 活动数据
-     ── 字段说明 ──
-       id:       唯一标识，不重复就行（event1, event2...）
-       date:     活动日期，格式必须是 "YYYY-MM-DD"
-       img:      活动照片 URL（留空显示 icon 占位图）
-       icon:     无图时的占位图标（HTML 实体码，安全）
-       title_en / title_zh: 活动标题（中英文独立）
-       desc_en  / desc_zh:  活动简介（中英文独立，可以写不同内容）
-     ── 自动逻辑 ──
-       系统根据今天的日期自动判断：
-         过去 > 7 天  → 左侧半透明小卡
-         前后 ≤ 7 天  → 中间大卡（本周）
-         未来 > 7 天  → 右侧半透明小卡
-       每周第一次打开自动跳到本周活动
-     ── 建议图片尺寸 ──
-       活动照片：1280x720（16:9），横幅风格
-  ============================================================ */
   activities: [
     {
       id: "event1",
-      date: "2025-02-07",         // ⚠️ 改日期
-      img:  "image/event1.jpg",                   // ⚠️ 填活动照片 URL
+      date: "2025-02-07",
+      img:  "image/event1.jpg",
       icon: "&#127807;",
       title_en: "Spring Kickoff Gathering",
       title_zh: "春季开学聚会",
@@ -615,7 +528,7 @@ var CONFIG = {
     },
     {
       id: "event4",
-      date: "2025-03-07",         // ⚠️ 每周更新这个日期
+      date: "2025-03-07",
       img:  "image/event4.jpg",
       icon: "&#9835;",
       title_en: "Weekly Fellowship - Worship Night",
@@ -643,15 +556,9 @@ var CONFIG = {
       desc_en:  "Celebrate the semester with the whole CCF family with food, fun, and heartfelt farewells.",
       desc_zh:  "学期最后一聚！和大家一起吃好吃的、聊这学期的回忆，然后依依不舍地说再见。"
     }
-    /* ⚠️ 新增活动：在上面最后一个 } 后加逗号，复制一段粘贴到这里，不需要写 type */
   ]
 
 }; /* ← CONFIG 结束 */
-
-
-/* ════════════════════════════════════════════════════════════════
-   以下代码自动读取 CONFIG，正常情况下不需要修改
-   ════════════════════════════════════════════════════════════════ */
 
 
 /* 把 CONFIG 里的链接注入到页面所有对应位置 */
@@ -770,13 +677,11 @@ function toggleLang() {
   var arc     = document.getElementById("hero-arc");
   var content = document.getElementById("hero-content");
 
-  /* 先清空再重建（保留 overlay/arc/content/dots/arrows） */
   var existingSlides = hero.querySelectorAll(".hero-slide");
   existingSlides.forEach(function(s) { s.remove(); });
 
   var slides = [];
 
-  /* 视频 */
   if (CONFIG.hero.video.src) {
     var vDiv = document.createElement("div");
     vDiv.className = "hero-slide active";
@@ -788,7 +693,6 @@ function toggleLang() {
     slides.push(vDiv);
   }
 
-  /* 图片 */
   CONFIG.hero.images.forEach(function(url, i) {
     var iDiv = document.createElement("div");
     iDiv.className = "hero-slide";
@@ -801,12 +705,10 @@ function toggleLang() {
 
   if (slides.length === 0) return;
 
-  /* 如果没有视频，激活第一张图 */
   if (!CONFIG.hero.video.src && slides.length > 0) {
     slides[0].classList.add("active");
   }
 
-  /* 生成控制点 */
   var totalSl   = slides.length;
   var curSl     = 0;
   var heroTimer = null;
@@ -854,7 +756,7 @@ function toggleLang() {
 
 
 /* ============================================================
-   活动区：从 CONFIG 读取活动数据
+   活动区：从 CONFIG 读取活动数据 + 自动轮播
 ============================================================ */
 var activitiesData = CONFIG.activities;
 
@@ -937,80 +839,11 @@ function renderActivities() {
   track.querySelectorAll(".act-slot").forEach(function(el) {
     el.addEventListener("click", function() {
       var idx = parseInt(this.getAttribute("data-idx"));
-      if (idx !== centerIdx) { centerIdx = idx; applyCenter(); }
+      if (idx !== centerIdx) { centerIdx = idx; applyCenter(); resetAutoPlay(); }
     });
   });
   applyCenter(); renderActsDots();
 }
-
-// ========== 自动轮播功能 ==========
-var autoPlayInterval = null;
-var autoPlayDelay = 5000; // 5秒切换一次（可以改这个数字）
-
-function startAutoPlay() {
-  if (autoPlayInterval) clearInterval(autoPlayInterval);
-  autoPlayInterval = setInterval(function() {
-    // 自动切换到下一张
-    actsNav(1);
-  }, autoPlayDelay);
-}
-
-function stopAutoPlay() {
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    autoPlayInterval = null;
-  }
-}
-
-// 鼠标悬停时暂停自动轮播
-document.addEventListener("DOMContentLoaded", function() {
-  var track = document.getElementById("acts-track");
-  if (track) {
-    track.addEventListener("mouseenter", stopAutoPlay);
-    track.addEventListener("mouseleave", startAutoPlay);
-    
-    // 触摸屏设备：手指触摸时暂停
-    track.addEventListener("touchstart", stopAutoPlay);
-    track.addEventListener("touchend", startAutoPlay);
-  }
-  
-  // 启动自动轮播
-  startAutoPlay();
-});
-
-// 当用户手动点击切换时，重置计时器
-function actsNavWithReset(dir) {
-  actsNav(dir);
-  // 重置自动轮播计时
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    startAutoPlay();
-  }
-}
-
-// 替换原来的 actsNav 函数
-// 找到原来的 actsNav 函数，把它改成这样：
-// function actsNav(dir) {
-//   var next = centerIdx + dir;
-//   if (next >= 0 && next < sortedActs.length) { 
-//     centerIdx = next; 
-//     applyCenter(); 
-//   }
-// }
-// 然后添加下面这个新函数
-function actsNavWithReset(dir) {
-  var next = centerIdx + dir;
-  if (next >= 0 && next < sortedActs.length) {
-    centerIdx = next;
-    applyCenter();
-  }
-  // 重置自动轮播计时器
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    startAutoPlay();
-  }
-}
-  
 function applyCenter() {
   var track = document.getElementById("acts-track");
   if (!track) return;
@@ -1035,7 +868,7 @@ function applyCenter() {
 }
 function actsNav(dir) {
   var next = centerIdx + dir;
-  if (next >= 0 && next < sortedActs.length) { centerIdx = next; applyCenter(); }
+  if (next >= 0 && next < sortedActs.length) { centerIdx = next; applyCenter(); resetAutoPlay(); }
 }
 function renderActsDots() {
   var c = document.getElementById("acts-dots");
@@ -1045,19 +878,34 @@ function renderActsDots() {
     var d = document.createElement("button");
     d.className = "acts-dot"+(i===centerIdx?" active":"");
     d.setAttribute("data-idx", i);
-    d.onclick = function() { 
-  centerIdx = parseInt(this.getAttribute("data-idx")); 
-  applyCenter();
-  // 重置自动轮播
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval);
-    startAutoPlay();
-  }
-};
+    d.onclick = function() { centerIdx = parseInt(this.getAttribute("data-idx")); applyCenter(); resetAutoPlay(); };
     c.appendChild(d);
   });
 }
 var actsTouchX = 0;
+
+// ========== 自动轮播功能 ==========
+var autoPlayInterval = null;
+var autoPlayDelay = 5000; // 5秒切换一次
+
+function startAutoPlay() {
+  if (autoPlayInterval) clearInterval(autoPlayInterval);
+  autoPlayInterval = setInterval(function() {
+    actsNav(1);
+  }, autoPlayDelay);
+}
+
+function stopAutoPlay() {
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    autoPlayInterval = null;
+  }
+}
+
+function resetAutoPlay() {
+  stopAutoPlay();
+  startAutoPlay();
+}
 
 
 /* ============================================================
@@ -1138,8 +986,6 @@ function scrollToId(id) {
 
 /* ============================================================
    📬 SURVEY SUBMIT — Google Sheets 接入
-   表单数据发送到 CONFIG.googleSheetURL（Apps Script Web App）
-   如果 URL 未填，仅在本地显示成功提示
 ============================================================ */
 function submitSurvey() {
   var fname     = document.getElementById("f-fname").value.trim();
@@ -1171,20 +1017,18 @@ function submitSurvey() {
   };
 
   if (CONFIG.googleSheetURL) {
-    /* 发送到 Google Sheets */
     fetch(CONFIG.googleSheetURL, {
       method:  "POST",
-      mode:    "no-cors",          /* Apps Script 不支持 CORS，用 no-cors 绕过 */
+      mode:    "no-cors",
       headers: {"Content-Type": "application/json"},
       body:    JSON.stringify(payload)
     }).then(function() {
       showSuccess();
     }).catch(function(err) {
       console.warn("Sheet submit error:", err);
-      showSuccess(); /* no-cors 下 catch 不会触发，此处保险 */
+      showSuccess();
     });
   } else {
-    /* URL 未填时：控制台打印，仍显示成功 */
     console.log("Survey (no sheet URL configured):", payload);
     showSuccess();
   }
@@ -1215,7 +1059,6 @@ function initReveal() {
    INIT
 ============================================================ */
 window.addEventListener("DOMContentLoaded", function() {
-  /* 把 CONFIG 里的链接注入到 HTML */
   document.querySelectorAll("[data-link]").forEach(function(el) {
     var key = el.getAttribute("data-link");
     if (CONFIG.links[key]) el.href = CONFIG.links[key];
@@ -1227,7 +1070,6 @@ window.addEventListener("DOMContentLoaded", function() {
   applyLang("en");
   initReveal();
 
-  /* 活动区触摸滑动 */
   var actsVP = document.getElementById("acts-track");
   if (actsVP) {
     actsVP.addEventListener("touchstart", function(e){ actsTouchX=e.touches[0].clientX; },{passive:true});
@@ -1235,7 +1077,17 @@ window.addEventListener("DOMContentLoaded", function() {
       var dx = e.changedTouches[0].clientX - actsTouchX;
       if (Math.abs(dx)>40) actsNav(dx<0?1:-1);
     },{passive:true});
+    
+    // 鼠标悬停暂停自动轮播
+    actsVP.addEventListener("mouseenter", stopAutoPlay);
+    actsVP.addEventListener("mouseleave", startAutoPlay);
+    // 触摸屏支持
+    actsVP.addEventListener("touchstart", stopAutoPlay);
+    actsVP.addEventListener("touchend", startAutoPlay);
   }
+  
+  // 启动自动轮播
+  startAutoPlay();
 
   window.addEventListener("resize", applyCenter);
   window.addEventListener("scroll", function() {
