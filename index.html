@@ -351,25 +351,30 @@ img{display:block;max-width:100%}
   .fg label {
     font-size: 0.75rem;
   }
-  .chk-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
- .chk {
-  font-size: 0.75rem;
-  white-space: normal;
-  word-break: normal;      
-  overflow-wrap: break-word; 
+ .chk-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
 }
-  .chk input {
-    flex-shrink: 0;
-  }
-  .btn-submit {
-    padding: 12px;
-    font-size: 0.85rem;
-    width: 100%;
-  }
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
+.chk input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.chk span {
+  flex: 1;
+  white-space: nowrap;
+}
   .survey-success {
     padding: 24px 16px;
   }
