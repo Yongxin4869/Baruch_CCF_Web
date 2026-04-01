@@ -756,7 +756,7 @@ function toggleLang() {
 
 
 /* ============================================================
-   活动区：从 CONFIG 读取活动数据 + 无限循环轮播
+   活动区：从 CONFIG 读取活动数据 + 无缝无限循环轮播
 ============================================================ */
 var activitiesData = CONFIG.activities;
 
@@ -782,32 +782,31 @@ var activitiesData = CONFIG.activities;
 var originalActs = activitiesData.slice().sort(function(a,b){ return a.dateObj - b.dateObj; });
 var originalCount = originalActs.length;
 
-// 构建无限循环数组：末尾追加第一张，开头追加最后一张
+// 构建无限循环数组：复制3份，确保永远有足够的卡片
 var loopActs = [];
-// 在开头追加最后一张（用于向左滚动时的衔接）
-loopActs.push(originalActs[originalCount - 1]);
-// 追加原始数组
-loopActs.push.apply(loopActs, originalActs);
-// 在末尾追加第一张（用于向右滚动时的衔接）
-loopActs.push(originalActs[0]);
+// 复制3份原始数组，确保无限滚动时永远不会看到边界
+for (var copy = 0; copy < 3; copy++) {
+  loopActs.push.apply(loopActs, originalActs);
+}
 
 var sortedActs = loopActs;
-var loopOffset = 1; // 真正的第一张在索引 1
+var loopOffset = originalCount; // 第一份原始数组的起始索引
+var totalCount = sortedActs.length;
 
-/* 每周自动定位 - 定位到原始数组的正确位置 */
+/* 每周自动定位 - 定位到中间那份的第一张 */
 function getWeekKey() {
   var d = new Date(), jan1 = new Date(d.getFullYear(),0,1);
   return d.getFullYear() + "-W" + Math.ceil(((d-jan1)/86400000 + jan1.getDay()+1)/7);
 }
-var centerIdx = loopOffset; // 默认从真实第一张开始
+var centerIdx = loopOffset; // 从中间那份的第一张开始
 (function initCenter() {
   var wk = getWeekKey(), saved = null;
   try { saved = localStorage.getItem("ccf-acts-week"); } catch(e) {}
   if (saved === wk) {
     try { 
       var savedIdx = parseInt(localStorage.getItem("ccf-acts-idx")||"0");
-      // 确保索引在有效范围内（1 到 originalCount）
-      if (savedIdx >= 1 && savedIdx <= originalCount) {
+      // 确保索引在中间那份的范围内
+      if (savedIdx >= loopOffset && savedIdx < loopOffset + originalCount) {
         centerIdx = savedIdx;
       }
     } catch(e) {}
@@ -822,7 +821,7 @@ var centerIdx = loopOffset; // 默认从真实第一张开始
         if (originalActs[j].type === "past") { best = j; break; }
       }
     }
-    centerIdx = best + loopOffset; // 加上偏移量
+    centerIdx = loopOffset + best;
     try { 
       localStorage.setItem("ccf-acts-week", wk); 
       localStorage.setItem("ccf-acts-idx", String(centerIdx)); 
@@ -840,15 +839,14 @@ function slotClass(i) {
   var dist = Math.abs(i - centerIdx);
   return dist === 0 ? "slot-center" : dist === 1 ? "slot-side" : "slot-far";
 }
-function makeCardHTML(ev, isClone) {
+function makeCardHTML(ev) {
   var title = lang==="zh"?ev.title_zh:ev.title_en;
   var desc  = lang==="zh"?ev.desc_zh :ev.desc_en;
   var tags  = {current:lang==="zh"?"本周":"This Week", past:lang==="zh"?"往期":"Past", upcoming:lang==="zh"?"即将":"Upcoming"};
   var imgH  = ev.img
     ? "<img class='act-img' src='"+ev.img+"' alt='"+title+"' loading='lazy'>"
     : "<div class='act-placeholder'>"+(ev.icon||"&#9733;")+"</div>";
-  // 克隆卡片不加点击跳转，避免混乱
-  return "<div class='act-card' data-clone='"+(isClone?"true":"false")+"'>"+
+  return "<div class='act-card'>"+
     "<div class='act-img-wrap'>"+imgH+"</div>"+
     "<div class='act-body'>"+
       "<div class='act-tag "+ev.type+"'>"+tags[ev.type]+"</div>"+
@@ -862,82 +860,31 @@ function renderActivities() {
   if (!track) return;
   var html = "";
   sortedActs.forEach(function(ev, i) {
-    var isClone = (i < loopOffset || i >= loopOffset + originalCount);
-    html += "<div class='act-slot "+slotClass(i)+"' data-idx='"+i+"'>"+makeCardHTML(ev, isClone)+"</div>";
+    html += "<div class='act-slot "+slotClass(i)+"' data-idx='"+i+"'>"+makeCardHTML(ev)+"</div>";
   });
   track.innerHTML = html;
   track.querySelectorAll(".act-slot").forEach(function(el) {
     el.addEventListener("click", function() {
       var idx = parseInt(this.getAttribute("data-idx"));
-      if (idx !== centerIdx && idx >= loopOffset && idx < loopOffset + originalCount) { 
+      if (idx !== centerIdx) { 
         centerIdx = idx; 
-        applyCenter(true); 
+        applyCenter(); 
         resetAutoPlay();
+        // 检查是否需要重置位置到中间区域
+        setTimeout(checkAndResetPosition, 300);
       }
     });
   });
-  applyCenter(false); 
+  applyCenter(); 
   renderActsDots();
 }
 
-function applyCenter(animate = true) {
+function applyCenter() {
   var track = document.getElementById("acts-track");
   if (!track) return;
   var vp    = track.parentElement;
   var slots = track.querySelectorAll(".act-slot");
   slots.forEach(function(s,i){ s.className = "act-slot "+slotClass(i); });
-  
-  // 检测是否需要跳转到真实位置（无限循环修正）
-  if (centerIdx < loopOffset) {
-    // 向左越界，跳转到原始数组末尾
-    centerIdx = loopOffset + originalCount - 1;
-    if (!animate) {
-      // 无动画直接定位
-      var jumpSlots = track.querySelectorAll(".act-slot");
-      var targetSlot = jumpSlots[centerIdx];
-      if (targetSlot) {
-        var vpR  = vp.getBoundingClientRect();
-        var csR  = targetSlot.getBoundingClientRect();
-        var delta = (vpR.left + vpR.width/2) - (csR.left + csR.width/2);
-        track.style.transition = "none";
-        track.style.transform = "translateX("+delta+"px)";
-        track.offsetHeight; // 强制重绘
-        track.style.transition = "";
-      }
-    } else {
-      // 有动画时，先跳到边界再修正位置会有视觉跳跃，这里直接重置位置
-      setTimeout(function() {
-        centerIdx = loopOffset + originalCount - 1;
-        applyCenter(false);
-        renderActsDots();
-      }, 50);
-      return;
-    }
-  } else if (centerIdx >= loopOffset + originalCount) {
-    // 向右越界，跳转到原始数组开头
-    centerIdx = loopOffset;
-    if (!animate) {
-      var jumpSlots = track.querySelectorAll(".act-slot");
-      var targetSlot = jumpSlots[centerIdx];
-      if (targetSlot) {
-        var vpR  = vp.getBoundingClientRect();
-        var csR  = targetSlot.getBoundingClientRect();
-        var delta = (vpR.left + vpR.width/2) - (csR.left + csR.width/2);
-        track.style.transition = "none";
-        track.style.transform = "translateX("+delta+"px)";
-        track.offsetHeight;
-        track.style.transition = "";
-      }
-    } else {
-      setTimeout(function() {
-        centerIdx = loopOffset;
-        applyCenter(false);
-        renderActsDots();
-      }, 50);
-      return;
-    }
-  }
-  
   var cs = slots[centerIdx];
   if (!cs) return;
   var style = window.getComputedStyle(track);
@@ -955,27 +902,70 @@ function applyCenter(animate = true) {
   renderActsDots();
 }
 
+// 检查并重置位置到中间区域（用户完全无感知）
+function checkAndResetPosition() {
+  var firstBoundary = loopOffset;
+  var lastBoundary = loopOffset + originalCount - 1;
+  
+  // 如果当前索引偏离了中间区域，需要重置
+  if (centerIdx < firstBoundary || centerIdx > lastBoundary) {
+    var originalIndex = ((centerIdx - loopOffset) % originalCount + originalCount) % originalCount;
+    var newCenterIdx = loopOffset + originalIndex;
+    var delta = newCenterIdx - centerIdx;
+    centerIdx = newCenterIdx;
+    
+    // 无动画重置位置
+    var track = document.getElementById("acts-track");
+    if (track) {
+      var curTransform = track.style.transform;
+      var match = curTransform.match(/translateX\(([-\d.]+)px\)/);
+      if (match) {
+        var curX = parseFloat(match[1]);
+        // 计算每个卡片的平均宽度
+        var slots = track.querySelectorAll(".act-slot");
+        var avgWidth = 0;
+        for (var i = 0; i < Math.min(slots.length, 5); i++) {
+          avgWidth += slots[i].offsetWidth;
+        }
+        avgWidth = avgWidth / Math.min(slots.length, 5);
+        var offset = delta * avgWidth;
+        track.style.transition = "none";
+        track.style.transform = "translateX(" + (curX - offset) + "px)";
+        track.offsetHeight; // 强制重绘
+        track.style.transition = "";
+      }
+    }
+    applyCenter();
+    renderActsDots();
+  }
+}
+
 function actsNav(dir) {
   var next = centerIdx + dir;
+  // 边界检查：永远不限制，让用户无限滑动
   centerIdx = next;
-  applyCenter(true);
+  applyCenter();
   resetAutoPlay();
+  // 滑动后检查是否需要重置位置（平滑重置，用户无感知）
+  setTimeout(checkAndResetPosition, 300);
 }
 
 function renderActsDots() {
   var c = document.getElementById("acts-dots");
   if (!c) return;
   c.innerHTML = "";
-  // 只显示真实活动的指示点（去掉克隆的）
+  // 只显示真实活动的指示点
   for (var i = 0; i < originalCount; i++) {
     var d = document.createElement("button");
-    var isActive = (centerIdx - loopOffset === i);
+    // 计算当前显示的是哪个真实活动
+    var currentOriginalIdx = ((centerIdx - loopOffset) % originalCount + originalCount) % originalCount;
+    var isActive = (currentOriginalIdx === i);
     d.className = "acts-dot" + (isActive ? " active" : "");
     d.setAttribute("data-idx", i);
     d.onclick = (function(idx) {
       return function() { 
-        centerIdx = idx + loopOffset; 
-        applyCenter(true); 
+        centerIdx = loopOffset + idx; 
+        applyCenter(); 
         resetAutoPlay();
       };
     })(i);
@@ -983,6 +973,30 @@ function renderActsDots() {
   }
 }
 
+var actsTouchX = 0;
+
+// ========== 自动轮播功能 ==========
+var autoPlayInterval = null;
+var autoPlayDelay = 5000;
+
+function startAutoPlay() {
+  if (autoPlayInterval) clearInterval(autoPlayInterval);
+  autoPlayInterval = setInterval(function() {
+    actsNav(1);
+  }, autoPlayDelay);
+}
+
+function stopAutoPlay() {
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval);
+    autoPlayInterval = null;
+  }
+}
+
+function resetAutoPlay() {
+  stopAutoPlay();
+  startAutoPlay();
+}
 var actsTouchX = 0;
 
 // ========== 自动轮播功能 ==========
